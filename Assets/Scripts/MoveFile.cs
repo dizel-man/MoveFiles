@@ -10,58 +10,44 @@ public class MoveFile : MonoBehaviour
 {
     public InputField from;
     public InputField to;
-    [Space(5)]
     public InputField fileName;
+
+
+    string f;
+    string t;
+
+  
 
 
     void Update()
     {
-       
+        RemoveSlash();
         ListenForChatSubmissionRequest();
-
     }
-
- 
-    static void MoveSomething(string from, string to)
-    {
-       
-        FileUtil.MoveFileOrDirectory(from, to);
-    }
-
 
     void ListenForChatSubmissionRequest()
     {
-        if (Input.GetKeyUp(KeyCode.Return))
+        if (Input.GetKeyUp(KeyCode.Return) && f != string.Empty && t != string.Empty)
         {
-            string f = RetrieveFrom().Replace("\\", "/") + "/";
-            string t = RetrieveTo().Replace("\\", "/") + "/";
-
-            if (f != string.Empty && t != string.Empty)
-            {
-
-                
-                foreach (string sFilePath in System.IO.Directory.GetFiles(f, fileName.text))
+                foreach (string sFilePath in System.IO.Directory.GetFiles(f, RetrieveInput(fileName)))
                 {
                     Debug.Log("Move this file : " + sFilePath + " -> " + t + " with name : " + sFilePath);
                     string sFileName = System.IO.Path.GetFileName(sFilePath);
                     System.IO.File.Copy(sFilePath, t + sFileName);
                 }
-
-            }
-
-           
         }
     }
 
-    public string RetrieveFrom()
+    string RetrieveInput(InputField field)
     {
-        return from.GetComponent<InputField>().text;
+        return field.text;
     }
 
-    public string RetrieveTo()
+    void RemoveSlash()
     {
-        return to.GetComponent<InputField>().text;
+        f = RetrieveInput(from).Replace("\\", "/") + "/";
+        t = RetrieveInput(to).Replace("\\", "/") + "/";
     }
-
+    
 
 }
