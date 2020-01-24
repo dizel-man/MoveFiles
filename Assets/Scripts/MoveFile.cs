@@ -13,10 +13,10 @@ public class MoveFile : MonoBehaviour
     public InputField fileName;
 
 
-    string f;
-    string t;
+    string from_;
+    string to_;
 
-  
+
 
 
     void Update()
@@ -27,14 +27,15 @@ public class MoveFile : MonoBehaviour
 
     void ListenForChatSubmissionRequest()
     {
-        if (Input.GetKeyUp(KeyCode.Return) && f != string.Empty && t != string.Empty)
+        if (Input.GetKeyUp(KeyCode.Return) && from_ != string.Empty && to_ != string.Empty)
         {
-                foreach (string sFilePath in System.IO.Directory.GetFiles(f, RetrieveInput(fileName)))
-                {
-                    Debug.Log("Move this file : " + sFilePath + " -> " + t + " with name : " + sFilePath);
-                    string sFileName = System.IO.Path.GetFileName(sFilePath);
-                    System.IO.File.Copy(sFilePath, t + sFileName);
-                }
+            foreach (string sFilePath in System.IO.Directory.GetFiles(from_, RetrieveInput(fileName)))
+            {
+                //  Debug.Log("Move this file : " + sFilePath + " -> " + t + " with name : " + sFilePath);
+
+                string sFileName = System.IO.Path.GetFileName(sFilePath);
+                System.IO.File.Copy(sFilePath, to_ + sFileName);
+            }
         }
     }
 
@@ -45,9 +46,9 @@ public class MoveFile : MonoBehaviour
 
     void RemoveSlash()
     {
-        f = RetrieveInput(from).Replace("\\", "/") + "/";
-        t = RetrieveInput(to).Replace("\\", "/") + "/";
+        from_ = RetrieveInput(from).Replace("\\", "/") + "/";
+        to_ = RetrieveInput(to).Replace("\\", "/") + "/";
     }
-    
+
 
 }
