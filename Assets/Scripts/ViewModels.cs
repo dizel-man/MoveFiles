@@ -12,6 +12,8 @@ public class ViewModels : MonoBehaviour
     public List<string> filesName = new List<string>();
 
     public int currentIndex = 0;
+
+    public float rotationSpeed = -20f;
     
 
     void Start()
@@ -19,13 +21,21 @@ public class ViewModels : MonoBehaviour
         GetFileName(FileUtility.GetResourcesDirectories()[0]);
         GetObjectFromResources();
 
+        // just show first object
+        GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+        o.transform.SetParent(anhor.transform);
+        GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
+
     }
 
     
     void Update()
     {
-      
+        ObjectsRotation();
     }
+
+
+
 
     void GetFileName(string dir)
     {
@@ -54,7 +64,7 @@ public class ViewModels : MonoBehaviour
         }
     }
 
-
+    #region Show Models
 
     void DestroyOld()
     {
@@ -76,6 +86,8 @@ public class ViewModels : MonoBehaviour
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
         o.transform.SetParent(anhor.transform);
 
+        GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
+
     }
 
     public void ShowPrev()
@@ -89,5 +101,14 @@ public class ViewModels : MonoBehaviour
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
         o.transform.SetParent(anhor.transform);
 
+        GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
+
     }
+
+    void ObjectsRotation()
+    {
+        anhor.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
+    }
+
+    #endregion
 }

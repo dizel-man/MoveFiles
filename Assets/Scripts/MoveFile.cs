@@ -17,37 +17,51 @@ public class MoveFile : MonoBehaviour
     string to_;
 
 
-
-
-    void Update()
+    private void Start()
     {
-        RemoveSlash();
-        ListenForChatSubmissionRequest();
+        string f = FileUtility.GetResourcesDirectories()[0].Replace("\\", "/") + "/";
+        from.text = f;
     }
 
-    void ListenForChatSubmissionRequest()
+    //void Update()
+    //{
+       
+      
+    //}
+
+   public void CopyFileToDirectory()
     {
-        if (Input.GetKeyUp(KeyCode.Return) && from_ != string.Empty && to_ != string.Empty)
+        Debug.Log(" press send");
+
+        if (from_ != string.Empty && to_ != string.Empty)// && Input.GetKeyUp(KeyCode.Return))
         {
-            foreach (string sFilePath in System.IO.Directory.GetFiles(from_, RetrieveInput(fileName)))
+            RemoveSlash();
+
+            foreach (string sFilePath in System.IO.Directory.GetFiles(from_, GetInputField(fileName)))
             {
-                //  Debug.Log("Move this file : " + sFilePath + " -> " + t + " with name : " + sFilePath);
+                  Debug.Log("Move this file : " + sFilePath + " -> " + to_ + " with name : " + sFilePath);
 
                 string sFileName = System.IO.Path.GetFileName(sFilePath);
                 System.IO.File.Copy(sFilePath, to_ + sFileName);
+
+                Debug.Log("sended");
             }
+        }
+        else
+        {
+            Debug.Log(" path is empty!");
         }
     }
 
-    string RetrieveInput(InputField field)
+    string GetInputField(InputField field)
     {
         return field.text;
     }
 
     void RemoveSlash()
     {
-        from_ = RetrieveInput(from).Replace("\\", "/") + "/";
-        to_ = RetrieveInput(to).Replace("\\", "/") + "/";
+        from_ = GetInputField(from).Replace("\\", "/") + "/";
+        to_ = GetInputField(to).Replace("\\", "/") + "/";
     }
 
 
