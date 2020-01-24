@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ViewModels : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class ViewModels : MonoBehaviour
     public int currentIndex = 0;
 
     public float rotationSpeed = -20f;
+
+    [Space(5)]
+    public GameObject Content;
+    public GameObject buttonFbx;
     
 
     void Start()
@@ -32,10 +37,47 @@ public class ViewModels : MonoBehaviour
     void Update()
     {
         ObjectsRotation();
+        ChangeDirectory(GetComponent<MoveFile>().from.text);
     }
 
 
+    void ChangeDirectory(string dir)
+    {
+       if(Input.GetKeyUp(KeyCode.Return))
+        {
+            foreach (Transform item in Content.transform)
+            {
+                Destroy(item.gameObject);
+            }
 
+            string newPath = GetComponent<MoveFile>().from.text.Replace("\\", "/") + "/";
+            GetComponent<MoveFile>().from.text = newPath;
+            filesName.Clear();
+            GetFileName(newPath);
+            // refresh lists
+            obj.Clear();
+
+            foreach (string item in filesName)
+            {
+                string f = item;
+                int exten = item.LastIndexOf(".");
+                if (exten >= 0)
+                {
+                    f = f.Substring(0, exten);
+                    GameObject ob = Resources.Load<GameObject>(f);
+                    obj.Add(ob);
+                }
+            }
+
+            currentIndex = 0;
+            DestroyOld();
+
+            GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+            o.transform.SetParent(anhor.transform);
+            GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
+
+        }
+    }
 
     void GetFileName(string dir)
     {
@@ -46,6 +88,11 @@ public class ViewModels : MonoBehaviour
         {
             //filesName.Add(file.FullName);//full path
             filesName.Add(file.Name);
+            // generate button fbx
+            GameObject button = Instantiate(buttonFbx);
+            button.transform.SetParent(Content.transform);
+            // naming button fbx
+            button.transform.GetChild(0).GetComponent<Text>().text = file.Name;
         }
     }
 
