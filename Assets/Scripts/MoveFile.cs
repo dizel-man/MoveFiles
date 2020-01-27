@@ -31,7 +31,7 @@ public class MoveFile : MonoBehaviour
 
    public void CopyFileToDirectory()
     {
-        Debug.Log(" press send");
+        //Debug.Log(" press send");
 
         if (from_ != string.Empty && to_ != string.Empty)// && Input.GetKeyUp(KeyCode.Return))
         {
@@ -39,12 +39,12 @@ public class MoveFile : MonoBehaviour
 
             foreach (string sFilePath in System.IO.Directory.GetFiles(from_, GetInputField(fileName)))
             {
-                  Debug.Log("Move this file : " + sFilePath + " -> " + to_ + " with name : " + sFilePath);
+               //   Debug.Log("Move this file : " + sFilePath + " -> " + to_ + " with name : " + sFilePath);
 
                 string sFileName = System.IO.Path.GetFileName(sFilePath);
                 System.IO.File.Copy(sFilePath, to_ + sFileName);
 
-                Debug.Log("sended");
+              //  Debug.Log("sended");
             }
         }
         else

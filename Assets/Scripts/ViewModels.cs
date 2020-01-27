@@ -52,7 +52,7 @@ public class ViewModels : MonoBehaviour
                 Destroy(item.gameObject);
             }
 
-            string newPath = GetComponent<MoveFile>().from.text.Replace("\\", "/") + "/";
+            string newPath = GetComponent<MoveFile>().from.text.Replace("\\", "/");// + "/";
             GetComponent<MoveFile>().from.text = newPath;
             filesName.Clear();
             buttons.Clear();
@@ -193,6 +193,8 @@ public class ViewModels : MonoBehaviour
 
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
         o.transform.SetParent(anhor.transform);
+
+        GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
 
     }
 
