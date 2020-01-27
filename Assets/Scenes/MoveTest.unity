@@ -2385,6 +2385,7 @@ MonoBehaviour:
   Content: {fileID: 1200476669}
   buttonFbx: {fileID: 8649324833522057811, guid: 03bad700a9ba18d429228ec8a6843ccb,
     type: 3}
+  buttons: []
 --- !u!1 &1415415033
 GameObject:
   m_ObjectHideFlags: 0

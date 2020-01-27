@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ViewModels : MonoBehaviour
 {
@@ -19,7 +20,8 @@ public class ViewModels : MonoBehaviour
     [Space(5)]
     public GameObject Content;
     public GameObject buttonFbx;
-    
+    public List<GameObject> buttons = new List<GameObject>();
+
 
     void Start()
     {
@@ -33,17 +35,17 @@ public class ViewModels : MonoBehaviour
 
     }
 
-    
+
     void Update()
     {
         ObjectsRotation();
         ChangeDirectory(GetComponent<MoveFile>().from.text);
     }
 
-
+    // refresh 
     void ChangeDirectory(string dir)
     {
-       if(Input.GetKeyUp(KeyCode.Return))
+        if (Input.GetKeyUp(KeyCode.Return))
         {
             foreach (Transform item in Content.transform)
             {
@@ -53,9 +55,11 @@ public class ViewModels : MonoBehaviour
             string newPath = GetComponent<MoveFile>().from.text.Replace("\\", "/") + "/";
             GetComponent<MoveFile>().from.text = newPath;
             filesName.Clear();
+            buttons.Clear();
             GetFileName(newPath);
             // refresh lists
             obj.Clear();
+        
 
             foreach (string item in filesName)
             {
@@ -66,6 +70,7 @@ public class ViewModels : MonoBehaviour
                     f = f.Substring(0, exten);
                     GameObject ob = Resources.Load<GameObject>(f);
                     obj.Add(ob);
+                 
                 }
             }
 
@@ -79,6 +84,7 @@ public class ViewModels : MonoBehaviour
         }
     }
 
+
     void GetFileName(string dir)
     {
 
@@ -88,12 +94,20 @@ public class ViewModels : MonoBehaviour
         {
             //filesName.Add(file.FullName);//full path
             filesName.Add(file.Name);
+            // filesName.Sort();
             // generate button fbx
             GameObject button = Instantiate(buttonFbx);
             button.transform.SetParent(Content.transform);
             // naming button fbx
             button.transform.GetChild(0).GetComponent<Text>().text = file.Name;
+            button.name = file.Name;
+
+            buttons.Add(button);
+
+           
         }
+
+       
     }
 
     void GetObjectFromResources()
@@ -107,21 +121,24 @@ public class ViewModels : MonoBehaviour
                 f = f.Substring(0, exten);
                 GameObject ob = Resources.Load<GameObject>(f);
                 obj.Add(ob);
+              
             }
         }
     }
 
     #region Show Models
 
+    //destroy 3d model on view monitor
     void DestroyOld()
     {
         foreach (Transform item in anhor.transform)
         {
-            if(item != null)
+            if (item != null)
                 Destroy(item.gameObject);
         }
     }
-    
+
+    //instance 3d model of next index
     public void ShowNext()
     {
         DestroyOld();
@@ -136,7 +153,7 @@ public class ViewModels : MonoBehaviour
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
 
     }
-
+    //instance 3d model of preview index
     public void ShowPrev()
     {
         DestroyOld();
@@ -151,11 +168,35 @@ public class ViewModels : MonoBehaviour
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
 
     }
-
+    // simple rotation 3d model on monitor
     void ObjectsRotation()
     {
         anhor.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
     }
+
+   
+
+    public void GetObgectFromButton(Button btn)
+    {
+        
+        string t = btn.transform.GetChild(0).GetComponent<Text>().text;
+
+        for (int i = 0; i < filesName.Count; i++)
+        {
+            if(t == filesName[i])
+            {
+                currentIndex = filesName.IndexOf(filesName[i]);
+            }
+        }
+
+        DestroyOld();
+
+        GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+        o.transform.SetParent(anhor.transform);
+
+    }
+
+    
 
     #endregion
 }
