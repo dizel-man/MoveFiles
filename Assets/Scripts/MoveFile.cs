@@ -19,17 +19,18 @@ public class MoveFile : MonoBehaviour
 
     private void Start()
     {
+        /*
+         * 
+        // just show first object
+
         string f = FileUtility.GetResourcesDirectories()[0].Replace("\\", "/") + "/";
         from.text = f;
+        */
     }
 
-    //void Update()
-    //{
-       
-      
-    //}
 
-   public void CopyFileToDirectory()
+
+    public void CopyFileToDirectory()
     {
         //Debug.Log(" press send");
 

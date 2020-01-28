@@ -25,14 +25,19 @@ public class ViewModels : MonoBehaviour
 
     void Start()
     {
+        /*
+         * 
+         * 
+        // just show first object
+
         GetFileName(FileUtility.GetResourcesDirectories()[0]);
         GetObjectFromResources();
 
-        // just show first object
+     
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
         o.transform.SetParent(anhor.transform);
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
-
+        */
     }
 
 
