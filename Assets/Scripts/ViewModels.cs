@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class ViewModels : MonoBehaviour
 {
     public GameObject anhor;
+    public Text countVerticesText;
     public List<GameObject> obj = new List<GameObject>();
 
     public List<string> filesName = new List<string>();
@@ -27,13 +28,12 @@ public class ViewModels : MonoBehaviour
     {
         /*
          * 
-         * 
-        // just show first object
+          // just show first object
 
         GetFileName(FileUtility.GetResourcesDirectories()[0]);
         GetObjectFromResources();
 
-     
+
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
         o.transform.SetParent(anhor.transform);
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
@@ -52,6 +52,7 @@ public class ViewModels : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Return))
         {
+
             foreach (Transform item in Content.transform)
             {
                 Destroy(item.gameObject);
@@ -64,7 +65,7 @@ public class ViewModels : MonoBehaviour
             GetFileName(newPath);
             // refresh lists
             obj.Clear();
-        
+
 
             foreach (string item in filesName)
             {
@@ -75,7 +76,7 @@ public class ViewModels : MonoBehaviour
                     f = f.Substring(0, exten);
                     GameObject ob = Resources.Load<GameObject>(f);
                     obj.Add(ob);
-                 
+
                 }
             }
 
@@ -83,8 +84,14 @@ public class ViewModels : MonoBehaviour
             DestroyOld();
 
             GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+
+            CountOfVertices(o);
+
             o.transform.SetParent(anhor.transform);
             GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
+
+          
+          
 
         }
     }
@@ -95,11 +102,11 @@ public class ViewModels : MonoBehaviour
 
         DirectoryInfo d = new DirectoryInfo(dir);
 
+
         foreach (var file in d.GetFiles("*.fbx"))
         {
             //filesName.Add(file.FullName);//full path
             filesName.Add(file.Name);
-            // filesName.Sort();
             // generate button fbx
             GameObject button = Instantiate(buttonFbx);
             button.transform.SetParent(Content.transform);
@@ -108,11 +115,8 @@ public class ViewModels : MonoBehaviour
             button.name = file.Name;
 
             buttons.Add(button);
-
-           
         }
 
-       
     }
 
     void GetObjectFromResources()
@@ -126,7 +130,7 @@ public class ViewModels : MonoBehaviour
                 f = f.Substring(0, exten);
                 GameObject ob = Resources.Load<GameObject>(f);
                 obj.Add(ob);
-              
+
             }
         }
     }
@@ -153,6 +157,7 @@ public class ViewModels : MonoBehaviour
             currentIndex = 0;
 
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+        CountOfVertices(o);
         o.transform.SetParent(anhor.transform);
 
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
@@ -168,6 +173,7 @@ public class ViewModels : MonoBehaviour
             currentIndex = obj.Count - 1;
 
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+        CountOfVertices(o);
         o.transform.SetParent(anhor.transform);
 
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
@@ -179,16 +185,16 @@ public class ViewModels : MonoBehaviour
         anhor.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
     }
 
-   
+
 
     public void GetObgectFromButton(Button btn)
     {
-        
+
         string t = btn.transform.GetChild(0).GetComponent<Text>().text;
 
         for (int i = 0; i < filesName.Count; i++)
         {
-            if(t == filesName[i])
+            if (t == filesName[i])
             {
                 currentIndex = filesName.IndexOf(filesName[i]);
             }
@@ -197,13 +203,28 @@ public class ViewModels : MonoBehaviour
         DestroyOld();
 
         GameObject o = Instantiate(obj[currentIndex], anhor.transform.position, anhor.transform.rotation);
+        CountOfVertices(o);
         o.transform.SetParent(anhor.transform);
 
         GetComponent<MoveFile>().fileName.text = filesName[currentIndex];
 
     }
 
-    
+    void CountOfVertices(GameObject ob)
+    {
+        if (ob.GetComponent<MeshFilter>() != null)
+        {
+            Mesh m = ob.GetComponent<MeshFilter>().mesh;
+
+            countVerticesText.text = "count of vertices: " + m.vertexCount.ToString();
+         //   Debug.Log("object " + ob.name + "count of vertices is: " + m.vertexCount);
+        }
+        else
+        {
+            Debug.Log("cant find Meshfilter component");
+        }
+    }
+
 
     #endregion
 }
